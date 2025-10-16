@@ -5,6 +5,9 @@ import cart_icon from "./cart_icon.png"
 import menu_icon from "./menu_icon.png"
 import dropdown_icon from "./dropdown_icon.png"
 import hero_img from "./hero_img.jpg"
+import exchange_icon from "./exchange_icon.png"
+import quality_img from "./quality_img.png"
+import support_img from "./support_img.png"
 // import p_img1 from "./p_img1"
 
 export interface ProductType {
@@ -28,6 +31,9 @@ export const assets = {
   menu_icon,
   dropdown_icon,
   hero_img,
+  exchange_icon,
+  quality_img,
+  support_img
   // p_img1
 };
 
