@@ -1,11 +1,14 @@
-import { createContext, type ReactNode } from "react";
-import { products } from "../assets/assets";
-import type { ProductType } from "../assets/assets";
+import { createContext, useState, type ReactNode } from "react";
+import { products, type ProductType } from "../assets/assets";
 
 interface ShopContextType {
   currency: string;
   delivery_fee: number;
   products: ProductType[];
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  showSearch: boolean;
+  setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface ShopContextProviderProps {
@@ -17,6 +20,8 @@ export const ShopContext = createContext<ShopContextType | undefined>(
 );
 
 const ShopContextProvider = ({ children }: ShopContextProviderProps) => {
+  const [search, setSearch] = useState("");
+  const [showSearch, setShowSearch] = useState(true);
   const currency = "$";
   const delivery_fee = 10;
 
@@ -24,6 +29,10 @@ const ShopContextProvider = ({ children }: ShopContextProviderProps) => {
     products,
     currency,
     delivery_fee,
+    search,
+    setSearch,
+    showSearch,
+    setShowSearch,
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
