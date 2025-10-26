@@ -9,6 +9,7 @@ interface ShopContextType {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  addToCart: void;
 }
 
 interface ShopContextProviderProps {
@@ -22,8 +23,25 @@ export const ShopContext = createContext<ShopContextType | undefined>(
 const ShopContextProvider = ({ children }: ShopContextProviderProps) => {
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(true);
+  const [cartItems, setCartItems] = useState({});
   const currency = "$";
   const delivery_fee = 10;
+
+  const addToCart = async (itemId, size) => {
+    let cartData = structuredClone(cartItems);
+
+    if (cartData[itemId]) {
+      if (cartData[itemId][size]) {
+        cartData[itemId][size] += 1;
+      } else {
+        cartData[itemId][size] = 1;
+      }
+    } else {
+      cartData[itemId] = {};
+      cartData[itemId][size] = 1;
+    }
+    setCartItems(cartData);
+  };
 
   const value = {
     products,
@@ -33,6 +51,8 @@ const ShopContextProvider = ({ children }: ShopContextProviderProps) => {
     setSearch,
     showSearch,
     setShowSearch,
+    cartItems,
+    addToCart,
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
