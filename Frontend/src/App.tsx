@@ -11,6 +11,7 @@ import About from "./pages/About";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
