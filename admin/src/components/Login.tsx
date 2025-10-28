@@ -1,13 +1,35 @@
 import { useState } from "react";
+import { backendUrl } from "../App";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const Login = () => {
+export interface TokenProps {
+  setToken: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const Login = ({ setToken }: TokenProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-    } catch (error) {}
+      const response = await axios.post(backendUrl + "/api/user/admin", {
+        email,
+        password,
+      });
+      if (response.data.success) {
+        setToken(response.data.token);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    }
   };
   return (
     <div className="min-h-screen flex items-center justify-center w-full">

@@ -1,4 +1,8 @@
-const List = () => {
+interface ListProps {
+  token: string;
+}
+
+const List = ({ token }: ListProps) => {
   return <div>List</div>;
 };
 
