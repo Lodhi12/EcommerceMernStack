@@ -1,7 +1,14 @@
+import { useContext } from "react";
 import { products } from "../assets/assets";
 import Title from "../components/Title";
+import { ShopContext } from "../context/ShopContext";
 
 const Orders = () => {
+  const shopContext = useContext(ShopContext);
+  if (!shopContext) {
+    throw new Error("Nothing found in shop context.");
+  }
+  const { currency } = shopContext;
   return (
     <div className="border-t pt-16">
       <div className="text-2xl">
