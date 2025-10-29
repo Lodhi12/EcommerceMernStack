@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { backendUrl } from "../App";
+import { backendUrl, currency } from "../App";
 import { toast } from "react-toastify";
 
 interface ListProps {
@@ -39,6 +39,28 @@ const List = ({ token }: ListProps) => {
     }
   };
 
+  const removeProduct = async (id: string) => {
+    try {
+      const response = await axios.post(
+        backendUrl + "/api/product/remove",
+        { id },
+        { headers: { token } }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        await fetchList();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    }
+  };
+
   useEffect(() => {
     fetchList();
   }, []);
@@ -59,6 +81,17 @@ const List = ({ token }: ListProps) => {
         {list.map((item, index) => (
           <div key={index}>
             <img src={item.image[0]} alt="" />
+            <p>{item.name}</p>
+            <p>{item.category}</p>
+            <p>
+              {currency} {item.price}
+            </p>
+            <p
+              onClick={() => removeProduct(item._id)}
+              className="text-right md:text-center cursor-pointer text-lg"
+            >
+              X
+            </p>
           </div>
         ))}
       </div>

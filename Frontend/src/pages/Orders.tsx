@@ -1,21 +1,45 @@
-import { useContext } from "react";
-import { products } from "../assets/assets";
+import { useContext, useEffect, useState } from "react";
+import { products, ProductType } from "../assets/assets";
 import Title from "../components/Title";
 import { ShopContext } from "../context/ShopContext";
+import axios from "axios";
 
 const Orders = () => {
   const shopContext = useContext(ShopContext);
   if (!shopContext) {
     throw new Error("Nothing found in shop context.");
   }
-  const { currency } = shopContext;
+  const { backendUrl, token, currency } = shopContext;
+  const [orderData, setOrderData] = useState<ProductType[]>([]);
+  const loadOrderData = async () => {
+    try {
+      if (!token) {
+        return null;
+      }
+      const response = await axios.post(
+        backendUrl + "/api/order/user",
+        {},
+        { headers: { token } }
+      );
+      if (response.data.success) {
+        let allOrdersItem = [];
+        response.data.orders.map((order) => {
+          order.items.map((item) => {});
+        });
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    loadOrderData();
+  }, [token]);
   return (
     <div className="border-t pt-16">
       <div className="text-2xl">
         <Title text1="MY" text2="ORDERS" />
       </div>
       <div>
-        {products.slice(1, 4).map((item, index) => (
+        {orderData.map((item, index) => (
           <div
             key={index}
             className="py-4 border-t border-b text-gray-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
