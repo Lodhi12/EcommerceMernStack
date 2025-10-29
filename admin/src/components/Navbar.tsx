@@ -1,3 +1,4 @@
+import { assets } from "../assets/assets";
 import type { TokenProps } from "./Login";
 
 const Navbar = ({ setToken }: TokenProps) => {

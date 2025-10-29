@@ -1,6 +1,8 @@
 import { useState } from "react";
-import type { TokenProps } from "../components/Login";
 import axios from "axios";
+import { backendUrl } from "../App";
+import { toast } from "react-toastify";
+import { assets } from "../assets/assets";
 
 interface AddProps {
   token: string;
@@ -20,7 +22,7 @@ const Add = ({ token }: AddProps) => {
   const [bestseller, setBestseller] = useState<boolean>(false);
   const [sizes, setSizes] = useState<string[]>([]);
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -29,13 +31,31 @@ const Add = ({ token }: AddProps) => {
       formData.append("price", price);
       formData.append("category", category);
       formData.append("subCategory", subCategory);
-      formData.append("bestseller", bestseller);
+      formData.append("bestseller", bestseller.toString());
       formData.append("sizes", JSON.stringify(sizes));
 
       image1 && formData.append("image1", image1);
       image2 && formData.append("image2", image2);
       image3 && formData.append("image3", image3);
       image4 && formData.append("image4", image4);
+
+      const response = await axios.post(
+        backendUrl + "/api/product/add",
+        formData,
+        { headers: { token } }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setName("");
+        setDescription("");
+        setImage1(null);
+        setImage2(null);
+        setImage3(null);
+        setImage4(null);
+        setPrice("");
+      } else {
+        toast.error(response.data.success);
+      }
     } catch (error) {}
   };
   return (
